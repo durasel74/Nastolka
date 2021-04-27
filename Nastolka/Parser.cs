@@ -34,18 +34,8 @@ namespace Nastolka
 			fileText = fileText.Replace(Environment.NewLine, "");
 			characters = CharactersFileSplit(fileText);
 
-			foreach (string characterText in characters)
-			{
-				CreateCharacter(characterText);
-			}
+			string outputText = CreateSet(characters);
 
-			string outputText = "";
-			foreach (string i in characters)
-			{
-				string newI1 = i.Split(':')[0];
-				string newI2 = i.Split(':')[1];
-				outputText += newI1 + "|" + newI2 + "\n";
-			}
 
 
 			return outputText;
@@ -82,12 +72,59 @@ namespace Nastolka
 		}
 
 		//
-		private static Character CreateCharacter(string characterText)
+		private static string CreateSet(List<string> characters)
 		{
-			
+			string[] splitedCharacter;
+			string characterName;
+			string characterTextVariables;
+			List<string> characterVariables;
 
+			string output = "";
+			foreach (string characterText in characters)
+			{
+				splitedCharacter = characterText.Split(':');
+				characterName = splitedCharacter[0].Trim();
+				characterTextVariables = splitedCharacter[1].Trim();
+				characterVariables = CleanVariables(characterTextVariables);
+				var newCharacter = new Character(characterName, characterVariables);
 
-			return new Character("OK", new List<string>());
+				foreach (string i in characterVariables)
+				{
+					output += i + "|";
+				}
+				output += "\n";
+			}
+			return output;
+		}
+
+		//
+		private static List<string> CleanVariables(string variables)
+		{
+			List<string> cleanedVariables = new List<string>();
+			string createdVariable;
+
+			variables = variables.Trim('{', '}');
+			variables = ClearExtraSymbols(variables);
+			foreach (string varialbe in variables.Split(" "))
+			{
+				createdVariable = varialbe.Trim();
+				if (createdVariable.Length > 0)
+					cleanedVariables.Add(createdVariable);
+			}
+			return cleanedVariables;
+		}
+
+		//
+		private static string ClearExtraSymbols(string text)
+		{
+			string newText = text;
+			newText = newText.Replace("\t", String.Empty);
+			newText = newText.Replace("\n", String.Empty);
+			while (newText.Contains("  "))
+			{
+				newText = newText.Replace("  ", " ");
+			}
+			return newText;
 		}
 	}
 }

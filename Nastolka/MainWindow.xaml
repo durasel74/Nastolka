@@ -16,6 +16,7 @@
         <TextBox HorizontalScrollBarVisibility="Auto"
             Text="{Binding TestText}"/>
 
-        <Button Grid.Row="1" Margin="10" Content="Генерировать"/>
+        <Button Grid.Row="1" Margin="10" Content="Генерировать"
+                Command="{Binding GenCommand}"/>
     </Grid>
 </Window>

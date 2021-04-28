@@ -8,20 +8,18 @@ namespace Nastolka
     {
         BunchSets bunchSets = new BunchSets();
 
-        public string TestText { get; set; }
-
-        public ViewModel()
+        private string viewOutput;
+        public string ViewOutput
         {
-            Load();
-		}
+            get { return viewOutput; }
+            set
+            {
+                viewOutput = value;
+                OnPropertyChanged("TestText");
+            }
+        }
 
-        private void Load()
-        {
-            bunchSets.OpenAllSets();
-            TestText = bunchSets.GetAllSetsInfo();
-		}
-
-
+        // Команда генерации характеристик.
         private ButtonCommand genCommand;
         public ButtonCommand GenCommand
         {
@@ -30,11 +28,15 @@ namespace Nastolka
                 return genCommand ??
                   (genCommand = new ButtonCommand(obj =>
                   {
-                      
+                      ViewOutput = bunchSets.RandomAll();
                   }));
             }
         }
 
+        public ViewModel()
+        {
+            bunchSets.OpenAllSets();
+		}
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

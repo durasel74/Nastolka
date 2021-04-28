@@ -6,8 +6,9 @@ namespace Nastolka
 {
 	public class ViewModel : INotifyPropertyChanged
     {
-        public string TestText { get; set; }
+        BunchSets bunchSets = new BunchSets();
 
+        public string TestText { get; set; }
 
         public ViewModel()
         {
@@ -16,8 +17,23 @@ namespace Nastolka
 
         private void Load()
         {
-            TestText = Parser.ParseAllFromDirectory();
+            bunchSets.OpenAllSets();
+            TestText = bunchSets.GetAllSetsInfo();
 		}
+
+
+        private ButtonCommand genCommand;
+        public ButtonCommand GenCommand
+        {
+            get
+            {
+                return genCommand ??
+                  (genCommand = new ButtonCommand(obj =>
+                  {
+                      
+                  }));
+            }
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

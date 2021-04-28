@@ -5,57 +5,69 @@ using System.Text;
 
 namespace Nastolka
 {
+	/// <summary>
+	/// Предоставляет методы для преобразования файлов в наборы характеристик.
+	/// </summary>
 	public static class Parser
 	{
 		private const string directoryPath = "Sets";
-		private static string[] sets;
-	
+		private const string fileFormat = ".txt";
 
-		public static string ParseAllFromDirectory()
+		/// <summary>
+		/// Преобразование всех файлов, находящихся в директории.
+		/// </summary>
+		/// <returns>Список полученных наборов.</returns>
+		public static List<Set> ParseAllFromDirectory()
 		{
-			string[] filesNames = GetAllFiles();
-			string fileText = "";
+			string[] filesNames = Directory.GetFiles(directoryPath);
+
+			Set newSet;
+			List<Set> sets = new List<Set>();
 			foreach (string fileName in filesNames)
 			{
-				fileText = ParseFile(fileName);
+				newSet = ParseFile(fileName);
+				sets.Add(newSet);
 			}
-			return fileText;
+			return sets;
 		}
 
-		public static string ParseFile(string path)
+		/// <summary>
+		/// Преобразует файл в набор характеристик.
+		/// </summary>
+		/// <param name="path">Путь к файлу.</param>
+		/// <returns>Возвращает набор характеристик.</returns>
+		public static Set ParseFile(string path)
 		{
 			string fileText;
-			List<string> characters;
-
 			using (StreamReader sr = new StreamReader(path, Encoding.UTF8))
 			{
 				fileText = sr.ReadToEnd();
 			}
 			fileText = fileText.Replace(Environment.NewLine, "");
-			characters = CharactersFileSplit(fileText);
-
-			string outputText = CreateSet(characters);
-
-
-
-			return outputText;
+			var charactersText = CharactersFileSplit(fileText);
+			var characters = ParseCharacters(charactersText);
+			string setName = GetCleanFileName(path);
+			var newSet = new Set(setName, characters);
+			return newSet;
 		}
 
-		//
-		private static string[] GetAllFiles()
+		// Выдает имя файла без расширения
+		private static string GetCleanFileName(string path)
 		{
-			sets = Directory.GetFiles(directoryPath);
-			return sets;
+			string result;
+			result = path.Replace(directoryPath + "\\", "");
+			result = result.Replace(fileFormat, "");
+			return result;
 		}
 
-		//
+		// Выделение отдельных характеристик и их вариаций
 		private static List<string> CharactersFileSplit(string fileText)
 		{
 			List<string> characters = new List<string>();
+			string newCharText;
 
 			int startSelectionIndex = 0;
 			int symbolCount = 1;
-			string newCharText;
 			for (int i = 0; i < fileText.Length; i++)
 			{
 				if (fileText[i] == '}')
@@ -71,33 +83,30 @@ namespace Nastolka
 			return characters;
 		}
 
-		//
-		private static string CreateSet(List<string> characters)
+		// Преобразует данные характеристик из файла в структуру
+		private static List<Character> ParseCharacters(List<string> characters)
 		{
+			List<Character> newCharacters = new List<Character>();
+
 			string[] splitedCharacter;
 			string characterName;
 			string characterTextVariables;
 			List<string> characterVariables;
+			Character newCharacter;
 
-			string output = "";
 			foreach (string characterText in characters)
 			{
 				splitedCharacter = characterText.Split(':');
 				characterName = splitedCharacter[0].Trim();
 				characterTextVariables = splitedCharacter[1].Trim();
 				characterVariables = CleanVariables(characterTextVariables);
-				var newCharacter = new Character(characterName, characterVariables);
-
-				foreach (string i in characterVariables)
-				{
-					output += i + "|";
-				}
-				output += "\n";
+				newCharacter = new Character(characterName, characterVariables);
+				newCharacters.Add(newCharacter);
 			}
-			return output;
+			return newCharacters;
 		}
 
-		//
+		// Преобразует варианты характеристик из файла в список вариантов
 		private static List<string> CleanVariables(string variables)
 		{
 			List<string> cleanedVariables = new List<string>();
@@ -114,7 +123,7 @@ namespace Nastolka
 			return cleanedVariables;
 		}
 
-		//
+		// Очистка текста от символов переноса строки, табуляции и лишних пробелов
 		private static string ClearExtraSymbols(string text)
 		{
 			string newText = text;

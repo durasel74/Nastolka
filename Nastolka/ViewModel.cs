@@ -15,7 +15,7 @@ namespace Nastolka
             set
             {
                 viewOutput = value;
-                OnPropertyChanged("TestText");
+                OnPropertyChanged("ViewOutput");
             }
         }
 

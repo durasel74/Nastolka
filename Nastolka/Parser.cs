@@ -43,12 +43,29 @@ namespace Nastolka
 			{
 				fileText = sr.ReadToEnd();
 			}
-			fileText = fileText.Replace(Environment.NewLine, "");
+			fileText = fileText.Replace(Environment.NewLine, " ");
 			var charactersText = CharactersFileSplit(fileText);
 			var characters = ParseCharacters(charactersText);
 			string setName = GetCleanFileName(path);
 			var newSet = new Set(setName, characters);
 			return newSet;
+		}
+
+		/// <summary>
+		/// Возвращает индекс характеристики в списке, найденный по имени.
+		/// </summary>
+		/// <param name="characterName">Имя характеристики.</param>
+		/// <param name="characters">Список характеристик.</param>
+		/// <returns>Индекс характеристики в списке.</returns>
+		public static int FindCharacterFromList(string characterName,
+			List<Character> characters)
+		{
+			for (int i = 0; i < characters.Count; i++)
+			{
+				if (characters[i].Name == characterName)
+					return i;
+			}
+			return -1;
 		}
 
 		// Выдает имя файла без расширения
@@ -92,7 +109,6 @@ namespace Nastolka
 			string characterName;
 			string characterTextVariables;
 			List<string> characterVariables;
-			Character newCharacter;
 
 			foreach (string characterText in characters)
 			{
@@ -100,10 +116,24 @@ namespace Nastolka
 				characterName = splitedCharacter[0].Trim();
 				characterTextVariables = splitedCharacter[1].Trim();
 				characterVariables = CleanVariables(characterTextVariables);
-				newCharacter = new Character(characterName, characterVariables);
-				newCharacters.Add(newCharacter);
+				CreateNewCharacter(characterName, characterVariables, newCharacters);
 			}
 			return newCharacters;
+		}
+
+		// Создание новой характеристики, присваивает все варианты
+		// характеристики уже существующей если такая существует.
+		private static void CreateNewCharacter(string characterName, 
+			List<string> characterVariables, List<Character> resultList)
+		{
+			int requiredIndex = FindCharacterFromList(characterName, resultList);
+			if (requiredIndex == -1)
+			{
+				var newCharacter = new Character(characterName, characterVariables);
+				resultList.Add(newCharacter);
+			}
+			else
+				resultList[requiredIndex].Variables.AddRange(characterVariables);
 		}
 
 		// Преобразует варианты характеристик из файла в список вариантов
@@ -128,7 +158,6 @@ namespace Nastolka
 		{
 			string newText = text;
 			newText = newText.Replace("\t", String.Empty);
-			newText = newText.Replace("\n", String.Empty);
 			while (newText.Contains("  "))
 			{
 				newText = newText.Replace("  ", " ");

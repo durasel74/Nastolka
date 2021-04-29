@@ -9,8 +9,18 @@ namespace Nastolka
 	public class Set
 	{
 		public string Name { get; set; }
-		public List<Character> Characters = new List<Character>();
+		public List<Character> Characters { get; set; }
 
+		public Set()
+		{
+			Name = "";
+			Characters = new List<Character>();
+		}
+		public Set(List<Character> characters)
+		{
+			Name = "";
+			Characters = characters;
+		}
 		public Set(string name, List<Character> characters)
 		{
 			Name = name;

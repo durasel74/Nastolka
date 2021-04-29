@@ -6,7 +6,7 @@ namespace Nastolka
 {
 	public class ViewModel : INotifyPropertyChanged
     {
-        BunchSets bunchSets = new BunchSets();
+        public BunchSets BunchSets { get; set; }
 
         private string viewOutput;
         public string ViewOutput
@@ -28,14 +28,15 @@ namespace Nastolka
                 return genCommand ??
                   (genCommand = new ButtonCommand(obj =>
                   {
-                      ViewOutput = bunchSets.RandomAll();
+                      ViewOutput = BunchSets.RandomizeSettingSets();
                   }));
             }
         }
 
         public ViewModel()
         {
-            bunchSets.OpenAllSets();
+            BunchSets = new BunchSets();
+            BunchSets.OpenAllSets();
 		}
 
         public event PropertyChangedEventHandler PropertyChanged;

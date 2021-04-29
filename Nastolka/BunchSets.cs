@@ -52,8 +52,7 @@ namespace Nastolka
 		public string RandomizeSettingSets()
 		{
 			Set commonSet = SetsMerge(CommonSets);
-			//string result = commonSet.RandomizeCharacters();
-			string result = commonSet.GetSetContent();
+			string result = commonSet.RandomizeCharacters();
 			return result;
 		}
 		
@@ -95,7 +94,10 @@ namespace Nastolka
 						resultSet.Characters);
 					if (requiredIndex == -1)
 					{
-						resultSet.Characters.Add(character);
+						var variables = character.Variables;
+						var newVariables = variables.GetRange(0, variables.Count);
+						var newCharacter = new Character(character.Name, newVariables);
+						resultSet.Characters.Add(newCharacter);
 					}
 					else
 					{

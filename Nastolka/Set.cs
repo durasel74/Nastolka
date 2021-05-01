@@ -33,7 +33,7 @@ namespace Nastolka
 		/// <returns>Строка с характеристиками.</returns>
 		public string GetSetContent()
 		{
-			string result = $"======Набор {Name}======\n";
+			string result = "";
 			foreach (Character character in Characters)
 			{
 				result += character.GetAllVariables() + "\n";

@@ -4,20 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Nastolka"
+        xmlns:Views="clr-namespace:Nastolka.ViewElements"
         mc:Ignorable="d"
-        Title="Nastolka" Height="600" Width="800">
-    
+        Title="Nastolka" Height="600" Width="1000" MinHeight="300"
+        MinWidth="400">
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="50"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
-        <TextBox HorizontalScrollBarVisibility="Auto"
+        <GridSplitter Grid.Column="1" SnapsToDevicePixels="True" Width="4"
+                      Margin="-1,0,0,0"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch"
+                      Background="{DynamicResource GenViewBorderColor}"/>
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GridSplitter Grid.Row="1" Height="5"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Center"/>
+            
+            <Border Grid.Row="0" Background="blue"/>
+            <Views:CommonSets Grid.Row="2"/>
+        </Grid>
+
+        <Views:GenView Grid.Column="0"/>
+
+
+
+        <!--<TextBox HorizontalScrollBarVisibility="Auto"
             Text="{Binding ViewOutput}"/>
 
         <Button Grid.Row="1" Margin="10" Content="Генерировать"
@@ -33,6 +55,6 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListBox>-->
     </Grid>
 </Window>

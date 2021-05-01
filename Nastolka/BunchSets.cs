@@ -46,6 +46,20 @@ namespace Nastolka
 		}
 
 		/// <summary>
+		/// Возвращает информацию о выбранном наборе.
+		/// </summary>
+		/// <param name="setName">Имя набора</param>
+		/// <returns>Строка с содержимым набора.</returns>
+		public string GetSetInfo(string setName)
+		{
+			string result = "";
+			Set set = FindSetByName(setName);
+			if (set != null)
+				result = set.GetSetContent();
+			return result;
+		}
+
+		/// <summary>
 		/// Генерирует случайную ситуацию для наборов текущего сеттинга.
 		/// </summary>
 		/// <returns>Строка с результатом генерации.</returns>
@@ -107,6 +121,17 @@ namespace Nastolka
 				}
 			}
 			return resultSet;
+		}
+
+		// Возвращает набор, найденный по имени
+		private Set FindSetByName(string setName)
+		{
+			foreach (Set set in Sets)
+			{
+				if (set.Name == setName)
+					return set;
+			}
+			return null;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

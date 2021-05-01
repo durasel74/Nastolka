@@ -10,6 +10,6 @@
     <Grid>
         <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                  VerticalScrollBarVisibility="Auto" 
-                 Text="{Binding SetInfo}"/>
+                 Text="{Binding SetInfo}" IsReadOnly="True"/>
     </Grid>
 </Window>

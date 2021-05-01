@@ -4,11 +4,11 @@ using System.Runtime.CompilerServices;
 
 namespace Nastolka
 {
-	public class ViewModel : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged
     {
         public BunchSets BunchSets { get; set; }
 
-        private string setInfoName; 
+        private string setInfoName;
         public string SetInfoName
         {
             get { return setInfoName; }
@@ -39,6 +39,39 @@ namespace Nastolka
                 viewOutput = value;
                 OnPropertyChanged("ViewOutput");
             }
+        }
+
+        private string currentSettingName;
+        public string CurrentSettingName
+        {
+            get { return currentSettingName; }
+            set
+            {
+                currentSettingName = value;
+                OnPropertyChanged("CurrentSettingName");
+            }
+        }
+
+        private string setsCount;
+        public string SetsCount
+        {
+            get { return setsCount; }
+            set
+            {
+                setsCount = value;
+                OnPropertyChanged("SetsCount");
+            }
+        }
+
+        private string settingSetsCount;
+        public string SettingSetsCount
+        {
+            get { return settingSetsCount; }
+            set
+            {
+                settingSetsCount = value;
+                OnPropertyChanged("SettingSetsCount");
+			}
         }
 
         // Команда генерации характеристик.
@@ -76,7 +109,7 @@ namespace Nastolka
             }
         }
 
-        //
+        // Команда перемещения набора из общей области в сеттинг
         private ButtonCommand toSettingCommand;
         public ButtonCommand ToSettingCommand
         { 
@@ -88,16 +121,81 @@ namespace Nastolka
                         string setName = obj as string;
                         if (setName != null)
 						{
-							
-						}
+                            BunchSets.SetToSetting(setName);
+                            UpdateSettingSetsCount();
+                        }
 					}));
 			}
+        }
+
+        // Команда перемещения набора из сеттинга в общую область
+        private ButtonCommand toCommonCommand;
+        public ButtonCommand ToCommonCommand
+        {
+            get
+            {
+                return toCommonCommand ??
+                    (toCommonCommand = new ButtonCommand(obj =>
+                    {
+                        string setName = obj as string;
+                        if (setName != null)
+                        {
+                            BunchSets.SetToCommon(setName);
+                            UpdateSettingSetsCount();
+                        }
+                    }));
+            }
+        }
+
+        // Команда перемещения набора вверх по сеттингу
+        private ButtonCommand upOnSetting;
+        public ButtonCommand UpOnSetting
+        {
+            get
+            {
+                return upOnSetting ??
+                    (upOnSetting = new ButtonCommand(obj =>
+                    {
+                        string setName = obj as string;
+                        if (setName != null)
+                        {
+                            BunchSets.MoveSetUp(setName);
+                        }
+                    }));
+            }
+        }
+
+        // Команда перемещения набора вниз по сеттингу
+        private ButtonCommand downOnSetting;
+        public ButtonCommand DownOnSetting
+        {
+            get
+            {
+                return downOnSetting ??
+                    (downOnSetting = new ButtonCommand(obj =>
+                    {
+                        string setName = obj as string;
+                        if (setName != null)
+                        {
+                            BunchSets.MoveSetDown(setName);
+                        }
+                    }));
+            }
         }
 
         public ViewModel()
         {
             BunchSets = new BunchSets();
             BunchSets.OpenAllSets();
+            CurrentSettingName = "Новый";
+            SetsCount = $"Всего: {BunchSets.GetCountSets()}";
+            SettingSetsCount = $"Включено: 0";
+		}
+
+        // Обновляет индикатор количества включенных наборов
+        private void UpdateSettingSetsCount()
+        {
+            SettingSetsCount = $"Включено: {BunchSets.SettingSets.Count}";
 		}
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -100,7 +100,7 @@ namespace Nastolka
 			return characters;
 		}
 
-		// Преобразует данные характеристик из файла в структуру
+		// Преобразует вариации характеристик из файла в структуру
 		private static List<Character> ParseCharacters(List<string> characters)
 		{
 			List<Character> newCharacters = new List<Character>();
@@ -144,7 +144,7 @@ namespace Nastolka
 
 			variables = variables.Trim('{', '}');
 			variables = ClearExtraSymbols(variables);
-			foreach (string varialbe in variables.Split(" "))
+			foreach (string varialbe in variables.Split(","))
 			{
 				createdVariable = varialbe.Trim();
 				if (createdVariable.Length > 0)

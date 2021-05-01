@@ -8,6 +8,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles\GenButton.xaml"/>
                 <ResourceDictionary Source="Styles\CommonSetsItem.xaml"/>
+                <ResourceDictionary Source="Styles\SettingSetsItem.xaml"/>
+                <ResourceDictionary Source="Styles\InfoPanel.xaml"/>
                 <ResourceDictionary Source="Styles\Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

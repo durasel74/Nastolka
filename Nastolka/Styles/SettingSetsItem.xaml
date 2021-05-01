@@ -1,15 +1,35 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
-    <ControlTemplate x:Key="CommonSetsItem" TargetType="ListBoxItem">
+
+    <ControlTemplate x:Key="SettingSetsItem" TargetType="ListBoxItem">
         <Border x:Name="ItemBG" Height="36"
                 BorderThickness="0,0,0,2"
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}">
             <Grid>
-                <TextBlock x:Name="Set" VerticalAlignment="Center"
-                           Margin="5" Foreground="#DDD" FontSize="16" 
-                           Text="{Binding Name}"/>
+                <StackPanel HorizontalAlignment="Left" Margin="1"
+                            Orientation="Horizontal">
+                    <StackPanel Width="20">
+                        <Button Height="14" BorderThickness="0"
+                                Margin="1" Background="#777"
+                                Content="^" Foreground="White" 
+                                Command="{Binding ElementName=root, 
+                                    Path=DataContext.UpOnSetting}"
+                                CommandParameter="{Binding ElementName=Set,
+                                    Path=Text}"/>
+                        <Button Height="14" BorderThickness="0"
+                                Margin="1" Background="#777"
+                                Content="v" Padding="0,-3,0,0"
+                                FontSize="10" Foreground="White" 
+                                Command="{Binding ElementName=root, 
+                                    Path=DataContext.DownOnSetting}"
+                                CommandParameter="{Binding ElementName=Set, 
+                                    Path=Text}"/>
+                    </StackPanel>
+                    <TextBlock x:Name="Set" VerticalAlignment="Center"
+                               Margin="10,0,0,0" Foreground="#DDD" 
+                               FontSize="16" Text="{Binding Name}"/>
+                </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Margin="3"
                             Orientation="Horizontal"
                             FlowDirection="RightToLeft"
@@ -21,9 +41,9 @@
                             CommandParameter="{Binding ElementName=Set, 
                                 Path=Text}"/>
                     <Button Width="30" BorderThickness="0" FontSize="18"
-                            Margin="4,0,0,0" Content="^" Background="#666" 
+                            Margin="4,0,0,0" Content="X" Background="#666" 
                             Foreground="White" Command="{Binding ElementName=root, 
-                                Path=DataContext.ToSettingCommand}"
+                                Path=DataContext.ToCommonCommand}"
                             CommandParameter="{Binding ElementName=Set, 
                                 Path=Text}"/>
                 </StackPanel>

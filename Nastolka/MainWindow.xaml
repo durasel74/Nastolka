@@ -11,7 +11,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*" MinWidth="100"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -27,34 +27,13 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <GridSplitter Grid.Row="1" Height="5"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Center"/>
+            <GridSplitter Grid.Row="1" SnapsToDevicePixels="True"
+                          Style="{StaticResource InfoPanel}"
+                          Height="25"/>
             
-            <Border Grid.Row="0" Background="blue"/>
+            <Views:SettingSets Grid.Row="0"/>
             <Views:CommonSets Grid.Row="2"/>
         </Grid>
-
         <Views:GenView Grid.Column="0"/>
-
-
-
-        <!--<TextBox HorizontalScrollBarVisibility="Auto"
-            Text="{Binding ViewOutput}"/>
-
-        <Button Grid.Row="1" Margin="10" Content="Генерировать"
-                Command="{Binding GenCommand}"/>
-
-        <ListBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                 DataContext="{Binding BunchSets}"
-                 ItemsSource="{Binding CommonSets}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="5">
-                        <TextBlock FontSize="14" Text="{Binding Path=Name}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>-->
     </Grid>
 </Window>

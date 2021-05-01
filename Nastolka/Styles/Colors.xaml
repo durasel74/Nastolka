@@ -2,7 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="GenViewBorderColor" Opacity="1" Color="#555"/>
-    <SolidColorBrush x:Key="GenViewBackgroundColor" Opacity="1" Color="#111"/>
-    <SolidColorBrush x:Key="GenViewTextBGColor" Opacity="1" Color="#111"/>
+    <SolidColorBrush x:Key="GenViewBackgroundColor" Opacity="1" Color="#222"/>
+    <LinearGradientBrush x:Key="SetsListBGColor" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0.95" Color="#222"/>
+        <GradientStop Offset="1" Color="#111"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="SetsListTitleColor" Opacity="1" Color="#333"/>
 </ResourceDictionary>
     

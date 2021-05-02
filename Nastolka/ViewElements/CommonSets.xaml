@@ -14,16 +14,28 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" 
-                    Background="{DynamicResource SetsListTitleColor}">
+            <Grid Grid.Row="0" 
+                  Background="{DynamicResource SetsListTitleColor}">
                 <TextBlock FontSize="20" VerticalAlignment="Center" 
                            HorizontalAlignment="Center" Text="Наборы"
                            Foreground="White"/>
-            </Border>
+                <Button Width="25" Margin="3" HorizontalAlignment="Right" 
+                        VerticalAlignment="Stretch" BorderThickness="0"
+                        FontSize="20" Padding="0,-4,0,0" Content="⇶"
+                        Background="#555" Foreground="White"
+                        Command="{Binding ElementName=root, 
+                            Path=DataContext.AllToSetting}">
+                    <Button.RenderTransform>
+                        <RotateTransform CenterX="13" CenterY="11" 
+                                         Angle="-90"/>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
 
             <ListBox Grid.Row="1" BorderThickness="0" Margin="0,3,0,0" 
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ItemsSource="{Binding BunchSets.CommonSets}"
+                     VirtualizingPanel.ScrollUnit="Pixel"
                      Background="Transparent">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">

@@ -41,17 +41,6 @@ namespace Nastolka
             }
         }
 
-        private string currentSettingName;
-        public string CurrentSettingName
-        {
-            get { return currentSettingName; }
-            set
-            {
-                currentSettingName = value;
-                OnPropertyChanged("CurrentSettingName");
-            }
-        }
-
         private string setsCount;
         public string SetsCount
         {
@@ -183,11 +172,59 @@ namespace Nastolka
             }
         }
 
+        // Команда переноса всех наборов в общую область
+        private ButtonCommand allToCommon;
+        public ButtonCommand AllToCommon
+        { 
+            get
+            {
+                return allToCommon ??
+                    (allToCommon = new ButtonCommand(obj =>
+                    {
+						BunchSets.AllSetsToCommon();
+                        UpdateSettingSetsCount();
+					}));
+			}
+        }
+
+        // Команда переноса всех наборов в сеттинг
+        private ButtonCommand allToSetting;
+        public ButtonCommand AllToSetting
+        {
+            get
+            {
+				return allToSetting ??
+					(allToSetting = new ButtonCommand(obj =>
+					{
+						BunchSets.AllSetsToSetting();
+                        UpdateSettingSetsCount();
+                    }));
+			}
+        }
+
+        // Команда пункта меню
+        private ButtonCommand menuCommand;
+        public ButtonCommand MenuCommand
+        { 
+            get
+            {
+                return menuCommand ??
+                    (menuCommand = new ButtonCommand(obj =>
+                    {
+                        string command = obj as string;
+                        if (command != null)
+                        {
+                            MenuCommander(command);
+						}
+                    }));
+            }
+        }
+
         public ViewModel()
         {
             BunchSets = new BunchSets();
             BunchSets.OpenAllSets();
-            CurrentSettingName = "Новый";
+            BunchSets.CurrentSettingName = "Новый";
             SetsCount = $"Всего: {BunchSets.GetCountSets()}";
             SettingSetsCount = $"Включено: 0";
 		}
@@ -197,6 +234,66 @@ namespace Nastolka
         {
             SettingSetsCount = $"Включено: {BunchSets.SettingSets.Count}";
 		}
+
+        // Принимает команду меню и выбирает действие
+        private void MenuCommander(string command)
+        {
+            switch (command)
+            {
+                case "new":
+                    NewSetting();
+                    break;
+                case "open":
+                    OpenSetting();
+                    break;
+                case "save":
+                    SaveSetting();
+                    break;
+                case "exit":
+                    System.Windows.Application.Current.Shutdown();
+                    break;
+            }
+		}
+
+        // Создает пустой сеттинг
+        private void NewSetting()
+        {
+            AllToCommon.Execute(null);
+            BunchSets.CurrentSettingName = "Новый";
+		}
+
+        // Диалог открытия сеттинга
+        private void OpenSetting()
+        {
+            var openDialog = new Microsoft.Win32.OpenFileDialog();
+            openDialog.DefaultExt = ".json";
+            openDialog.Filter = "Text files (*.json)|*.json";
+
+            Nullable<bool> result = openDialog.ShowDialog();
+            if (result == true)
+            {
+                AllToCommon.Execute(null);
+                string fileName = openDialog.FileName;
+                BunchSets.DeserializeSetting(fileName);
+            }
+        }
+
+        // Диалог сохранения сеттинга
+        private void SaveSetting()
+        {
+            var saveDialog = new Microsoft.Win32.SaveFileDialog();
+            if (BunchSets.CurrentSettingName != "Новый")
+                saveDialog.FileName = BunchSets.CurrentSettingName;
+            saveDialog.DefaultExt = ".json";
+            saveDialog.Filter = "Text files (*.json)|*.json";
+
+            Nullable<bool> result = saveDialog.ShowDialog();
+            if (result == true)
+            {
+                string fileName = saveDialog.FileName;
+                BunchSets.SerializeCurrentSetting(fileName);
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

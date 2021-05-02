@@ -10,30 +10,50 @@
         MinWidth="400">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" MinWidth="100"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <GridSplitter Grid.Column="1" SnapsToDevicePixels="True" Width="4"
-                      Margin="-1,0,0,0"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch"
-                      Background="{DynamicResource GenViewBorderColor}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" VerticalAlignment="Stretch">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Новый" Command="{Binding MenuCommand}"
+                          CommandParameter="new"/>
+                <MenuItem Header="Открыть" Command="{Binding MenuCommand}"
+                          CommandParameter="open"/>
+                <MenuItem Header="Сохранить" Command="{Binding MenuCommand}"
+                          CommandParameter="save"/>
+                <Separator />
+                <MenuItem Header="Выход" Command="{Binding MenuCommand}"
+                          CommandParameter="exit"/>
+            </MenuItem>
+        </Menu>
 
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <GridSplitter Grid.Row="1" SnapsToDevicePixels="True"
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MinWidth="100"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column="1" SnapsToDevicePixels="True" 
+                          Width="4" Margin="-1,0,0,0"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch"
+                          Background="{DynamicResource GenViewBorderColor}"/>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <GridSplitter Grid.Row="1" SnapsToDevicePixels="True"
                           Style="{StaticResource InfoPanel}"
                           Height="25"/>
-            
-            <Views:SettingSets Grid.Row="0"/>
-            <Views:CommonSets Grid.Row="2"/>
+
+                <Views:SettingSets Grid.Row="0"/>
+                <Views:CommonSets Grid.Row="2"/>
+            </Grid>
+            <Views:GenView Grid.Column="0"/>
         </Grid>
-        <Views:GenView Grid.Column="0"/>
     </Grid>
 </Window>

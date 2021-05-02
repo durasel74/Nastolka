@@ -1,8 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Text.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+
+using System.Windows;
 
 namespace Nastolka
 {
@@ -14,6 +18,18 @@ namespace Nastolka
 		private List<Set> Sets;
 		public ObservableCollection<Set> CommonSets { get; set; }
 		public ObservableCollection<Set> SettingSets { get; set; }
+
+		private string currentSettingName;
+		public string CurrentSettingName
+		{
+			get { return currentSettingName; }
+			set
+			{
+				currentSettingName = value;
+				OnPropertyChanged("CurrentSettingName");
+			}
+		}
+
 
 		public BunchSets()
 		{
@@ -174,6 +190,44 @@ namespace Nastolka
 			return Sets.Count;
 		}
 
+		/// <summary>
+		/// Открывает сеттинг из файла.
+		/// </summary>
+		/// <param name="fileName">Путь к файлу.</param>
+		public void DeserializeSetting(string filePath)
+		{
+			SettingSerialization openedSet;
+			using (StreamReader sr = new StreamReader(filePath))
+			{
+				string json = sr.ReadToEnd();
+				openedSet = JsonSerializer.Deserialize<SettingSerialization>(json);
+				CurrentSettingName = openedSet.SettingName;
+				foreach (Set set in openedSet.SerializableSets)
+				{
+					SetToSetting(set.Name);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Сохраняет текущий сеттинг в файл.
+		/// </summary>
+		/// <param name="settingName">Имя сеттинга.</param>
+		public void SerializeCurrentSetting(string fileName)
+		{
+			FileInfo fi = new FileInfo(fileName);
+			string settingName = fi.Name.Replace(".json", "");
+			var serialize = new SettingSerialization(settingName, SettingSets);
+
+			using (StreamWriter sw = new StreamWriter(fileName, true, 
+				System.Text.Encoding.Default))
+			{
+				string json = JsonSerializer.Serialize<SettingSerialization>(serialize);
+				sw.Write(json);
+				CurrentSettingName = settingName;
+			}
+		}
+
 		// Возвращает набор, как результат слияния списка наборов
 		private Set SetsMerge(ObservableCollection<Set> sets)
 		{
@@ -206,6 +260,23 @@ namespace Nastolka
 		{
 			if (PropertyChanged != null)
 				PropertyChanged(this, new PropertyChangedEventArgs(prop));
+		}
+	}
+
+	/// <summary>
+	/// Хранит список наборов текущего сеттинга для последующего сохранения.
+	/// </summary>
+	public class SettingSerialization
+	{
+		public string SettingName { get; set; }
+		public ObservableCollection<Set> SerializableSets { get; set; }
+
+		public SettingSerialization() { }
+		public SettingSerialization(string settingName, 
+			ObservableCollection<Set> sets)
+		{
+			SettingName = settingName;
+			SerializableSets = sets;
 		}
 	}
 }

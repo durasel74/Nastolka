@@ -276,6 +276,7 @@ namespace Nastolka
                 string fileName = openDialog.FileName;
                 BunchSets.DeserializeSetting(fileName);
             }
+            UpdateSettingSetsCount();
         }
 
         // Диалог сохранения сеттинга

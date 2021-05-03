@@ -6,8 +6,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-using System.Windows;
-
 namespace Nastolka
 {
 	/// <summary>
@@ -119,8 +117,11 @@ namespace Nastolka
 		public void SetToSetting(string setName)
 		{
 			var set = FindSetByName(setName);
-			CommonSets.Remove(set);
-			SettingSets.Add(set);
+			if (set != null)
+			{
+				CommonSets.Remove(set);
+				SettingSets.Add(set);
+			}
 		}
 
 		/// <summary>
@@ -130,8 +131,11 @@ namespace Nastolka
 		public void SetToCommon(string setName)
 		{
 			var set = FindSetByName(setName);
-			SettingSets.Remove(set);
-			CommonSets.Add(set);
+			if (set != null)
+			{
+				SettingSets.Remove(set);
+				CommonSets.Add(set);
+			}
 		}
 
 		/// <summary>

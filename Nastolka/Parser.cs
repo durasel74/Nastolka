@@ -25,8 +25,18 @@ namespace Nastolka
 			List<Set> sets = new List<Set>();
 			foreach (string fileName in filesNames)
 			{
-				newSet = ParseFile(fileName);
-				sets.Add(newSet);
+				try
+				{
+					newSet = ParseFile(fileName);
+					sets.Add(newSet);
+				}
+				catch
+				{
+					FileInfo fi = new FileInfo(fileName);
+					System.Windows.MessageBox.Show($"Ошибка в файле {fi.Name}", 
+						"Ошибка");
+					System.Windows.Application.Current.Shutdown();
+				}
 			}
 			return sets;
 		}
